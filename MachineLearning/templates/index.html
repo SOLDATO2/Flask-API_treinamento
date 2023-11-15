@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 16px;
+            box-sizing: border-box;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        #responseMessage {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        #error-message {
+            color: #ff0000;
+            margin-top: 8px;
+        }
+    </style>
+    <title>Previsão de AVC</title>
+    
+</head>
+<body>
+    <h1>Previsão de AVC</h1>
+    <form id="myForm">
+        <label for="Age">Idade:</label>
+        <input type="text" name="Age" required><br>
+
+        <label for="Gender">Sexo:</label>
+        <select name="Gender" required>
+            <option value="1">Masculino</option>
+            <option value="-1">Feminino</option>
+        </select><br>
+
+        <label for="Hypertension">Hipertensao:</label>
+        <select name="Hypertension" required>
+            <option value="1">Sim</option>
+            <option value="0">Não</option>
+        </select><br>
+
+        <label for="HeartDisease">Doenças do coração:</label>
+        <select name="Heart Disease" required>
+            <option value="1">Sim</option>
+            <option value="0">Não</option>
+        </select><br>
+
+        <label for="AverageGlucoseLevel">Nivel de Glucose:</label>
+        <input type="text" name="Average Glucose Level" required><br>
+
+        <label for="SmokingStatus">Fuma:</label>
+        <select name="Smoking Status" required>
+            <option value="1">Não</option>
+            <option value="2">Casualmente</option>
+            <option value="3">Com frequencia</option>
+        </select><br>
+
+        <label for="PhysicalActivity">Atividade fisica:</label>
+        <select name="Physical Activity" required>
+            <option value="1">Baixa</option>
+            <option value="2">Media</option>
+            <option value="3">Alta</option>
+        </select><br>
+
+        <label for="StrokeHistory">Historico de AVC:</label>
+        <select name="Stroke History" required>
+            <option value="1">Sim</option>
+            <option value="0">Não</option>
+        </select><br>
+
+        <label for="FamilyHistoryofStroke">Historico de AVC familiar:</label>
+        <select name="Family History of Stroke" required>
+            <option value="1">Sim</option>
+            <option value="0">Não</option>
+        </select><br>
+
+        <input type="submit" value="Prever Risco de AVC">
+
+        <div id="responseMessage"></div>
+
+        <script>
+            document.getElementById("myForm").addEventListener("submit", function (e) {
+                e.preventDefault();
+                
+                const formData = new FormData(this);
+    
+                // Converte os dados do formulário para um objeto JSON
+                const jsonData = {};
+                formData.forEach((value, key) => {
+                    jsonData[key] = value;
+                });
+    
+                // Envia os dados para a API REST
+                fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(jsonData)
+                })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("responseMessage").textContent = "Resposta da API: " + JSON.stringify(data);//Se for 1 então tem risco, se for 0 não tem risco
+                })
+                .catch(error => {
+                    document.getElementById("responseMessage").textContent = "Erro: " + error.message;
+                });
+            });
+        </script>
+
+    </form>
+</body>
+</html>
