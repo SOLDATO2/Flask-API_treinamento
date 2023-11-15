@@ -1,6 +1,6 @@
 # Flask-API_treinamento
 
-#Integrantes
+# Integrantes
 
 Alexandre Wahl e Felipe Porto Caldeira do Nascimento.
 
